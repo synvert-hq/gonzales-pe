@@ -11,6 +11,7 @@
     "url": "http://tonyganch.com"
   },
   "main": "./lib/gonzales",
+  "types": "index.d.ts",
   "repository": {
     "type": "git",
     "url": "http://github.com/tonyganch/gonzales-pe.git"
@@ -51,6 +52,7 @@
   "files": [
     "MIT-LICENSE.txt",
     "bin/gonzales.js",
-    "lib/gonzales.js"
+    "lib/gonzales.js",
+    "index.d.ts"
   ]
 }
