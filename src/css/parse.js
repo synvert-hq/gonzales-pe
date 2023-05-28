@@ -272,7 +272,7 @@ function getLastPositionForArray(content, line, column, colOffset) {
   return position;
 }
 
-function newNode(type, content, line, column, end) {
+function newNode(type, content, line, column, end, sourceFile) {
   if (!end) end = getLastPosition(content, line, column);
   return new Node({
     type: type,
@@ -285,7 +285,8 @@ function newNode(type, content, line, column, end) {
       line: end[0],
       column: end[1]
     },
-    syntax: 'css'
+    syntax: 'css',
+    sourceFile: sourceFile
   });
 }
 
@@ -365,7 +366,7 @@ function getArguments() {
   // Skip `)`.
   pos++;
 
-  return newNode(type, content, line, column, end);
+  return newNode(type, content, line, column, end, token.sourceFile);
 }
 
 /**
@@ -427,7 +428,7 @@ function getAtkeyword() {
 
   const content = [getIdent()];
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -511,7 +512,7 @@ function getAtruleb() {
     getBlock()
   );
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -556,7 +557,7 @@ function getAtruler() {
     getAtrulers()
   );
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -616,7 +617,7 @@ function getAtrulers() {
   // Skip `}`.
   pos++;
 
-  return newNode(type, content, line, column, end);
+  return newNode(type, content, line, column, end, token.sourceFile);
 }
 
 /**
@@ -650,7 +651,7 @@ function getAtrules() {
     getTsets()
   );
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -686,7 +687,7 @@ function getBlock() {
   const end_ = getLastPosition(content, line, column, 1);
   pos = end + 1;
 
-  return newNode(type, content, line, column, end_);
+  return newNode(type, content, line, column, end_, token.sourceFile);
 }
 
 /**
@@ -908,7 +909,7 @@ function getBrackets() {
   // Skip `]`.
   pos++;
 
-  return newNode(type, content, line, column, end);
+  return newNode(type, content, line, column, end, token.sourceFile);
 }
 
 /**
@@ -953,7 +954,7 @@ function getClass() {
 
   const content = [getIdent()];
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 function checkCombinator(i) {
@@ -1004,7 +1005,7 @@ function getCombinator1() {
   // Skip combinator
   pos += 3;
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -1039,7 +1040,7 @@ function getCombinator2() {
   // Skip combinator
   pos += 2;
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -1071,7 +1072,7 @@ function getCombinator3() {
   // Skip combinator
   pos++;
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -1112,7 +1113,7 @@ function getCombinator4() {
 
   const content = `/${ident.content}/`;
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -1143,7 +1144,7 @@ function getCommentML() {
   if (end[0] === line) end[1] += 2;
   pos++;
 
-  return newNode(type, content, line, column, end);
+  return newNode(type, content, line, column, end, token.sourceFile);
 }
 
 /**
@@ -1190,7 +1191,7 @@ function getDeclaration() {
     getValue()
   );
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -1215,7 +1216,7 @@ function getDeclDelim() {
 
   pos++;
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -1240,7 +1241,7 @@ function getDelim() {
 
   pos++;
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -1273,7 +1274,7 @@ function getDimension() {
     getUnit()
   ];
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -1308,7 +1309,7 @@ function getExpression() {
   if (end[0] === line) end[1] += 11;
   pos = tokens[pos].right + 1;
 
-  return newNode(type, content, line, column, end);
+  return newNode(type, content, line, column, end, token.sourceFile);
 }
 
 /**
@@ -1341,7 +1342,7 @@ function getFunction() {
     getArguments()
   );
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -1394,7 +1395,7 @@ function getIdent() {
 
   pos = tokens[pos].ident_last + 1;
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -1432,7 +1433,7 @@ function getImportant() {
 
   pos = token.importantEnd + 1;
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -1472,7 +1473,7 @@ function getKeyframesBlock() {
     getBlock()
   );
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -1529,7 +1530,7 @@ function getKeyframesBlocks() {
   // Skip `}`.
   pos++;
 
-  return newNode(type, content, line, column, end);
+  return newNode(type, content, line, column, end, token.sourceFile);
 }
 
 /**
@@ -1579,7 +1580,7 @@ function getKeyframesRule() {
     getKeyframesBlocks()
   );
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -1632,10 +1633,12 @@ function getKeyframesSelector() {
     keyframesSelectorType,
     content,
     line,
-    column
+    column,
+    null,
+    token.sourceFile
   );
 
-  return newNode(selectorType, [keyframesSelector], line, column);
+  return newNode(selectorType, [keyframesSelector], line, column, null, token.sourceFile);
 }
 
 /**
@@ -1710,7 +1713,7 @@ function getNamespace() {
 
   pos++;
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -1804,7 +1807,7 @@ function getNumber() {
 
   pos += l;
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -1840,7 +1843,7 @@ function getOperator() {
 
   pos++;
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -1894,7 +1897,7 @@ function getParentheses() {
   // Skip `)`.
   pos++;
 
-  return newNode(type, content, line, column, end);
+  return newNode(type, content, line, column, end, token.sourceFile);
 }
 
 /**
@@ -1935,7 +1938,7 @@ function getPercentage() {
   // Skip `%`.
   pos++;
 
-  return newNode(type, content, line, column, end);
+  return newNode(type, content, line, column, end, token.sourceFile);
 }
 
 /**
@@ -1977,7 +1980,7 @@ function getProgid() {
 
   pos = progid_end + 1;
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -2034,7 +2037,7 @@ function getProperty1() {
   const column = token.col;
   const content = [getIdent()];
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -2092,7 +2095,7 @@ function getCustomProperty() {
 
   const content = [getIdent()];
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -2118,7 +2121,7 @@ function getPropertyDelim() {
   // Skip `:`.
   pos++;
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -2236,14 +2239,14 @@ function getPseudoElement1() {
     );
 
     const end = getLastPosition(selectorContent, line, column, 1);
-    const args = newNode(type, selectorContent, line, column, end);
+    const args = newNode(type, selectorContent, line, column, end, token.sourceFile);
     content.push(args);
 
     // Skip `)`.
     pos++;
   }
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 function checkPseudoElement2(i) {
@@ -2273,7 +2276,7 @@ function getPseudoElement2() {
 
   let content = [getIdent()];
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -2379,14 +2382,14 @@ function getPseudoClass1() {
     );
 
     const end = getLastPosition(selectorContent, line, column, 1);
-    const args = newNode(type, selectorContent, line, column, end);
+    const args = newNode(type, selectorContent, line, column, end, token.sourceFile);
     content.push(args);
 
     // Skip `)`.
     pos++;
   }
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -2453,13 +2456,13 @@ function getPseudoClass2() {
   );
 
   const end = getLastPosition(value, l, c, 1);
-  const args = newNode(NodeType.ArgumentsType, value, l, c, end);
+  const args = newNode(NodeType.ArgumentsType, value, l, c, end, token.sourceFile);
   content.push(args);
 
   // Skip `)`.
   pos++;
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -2547,7 +2550,7 @@ function getPseudoClass3() {
     const l = tokens[pos].ln;
     const c = tokens[pos].col;
     const content = tokens[pos].value;
-    const ident = newNode(NodeType.IdentType, content, l, c);
+    const ident = newNode(NodeType.IdentType, content, l, c, null, token.sourceFile);
     value.push(ident);
     pos++;
   }
@@ -2563,13 +2566,13 @@ function getPseudoClass3() {
   value = value.concat(getSC());
 
   const end = getLastPosition(value, l, c, 1);
-  const args = newNode(NodeType.ArgumentsType, value, l, c, end);
+  const args = newNode(NodeType.ArgumentsType, value, l, c, end, token.sourceFile);
   content.push(args);
 
   // Skip `)`.
   pos++;
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -2641,13 +2644,13 @@ function getPseudoClass4() {
   value = value.concat(getSC());
 
   const end = getLastPosition(value, l, c, 1);
-  const args = newNode(NodeType.ArgumentsType, value, l, c, end);
+  const args = newNode(NodeType.ArgumentsType, value, l, c, end, token.sourceFile);
   content.push(args);
 
   // Skip `)`.
   pos++;
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -2716,13 +2719,13 @@ function getPseudoClass5() {
   value = value.concat(getSC());
 
   const end = getLastPosition(value, l, c, 1);
-  const args = newNode(NodeType.ArgumentsType, value, l, c, end);
+  const args = newNode(NodeType.ArgumentsType, value, l, c, end, token.sourceFile);
   content.push(args);
 
   // Skip `)`.
   pos++;
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -2754,7 +2757,7 @@ function getPseudoClass6() {
 
   const content = [getIdent()];
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -2792,7 +2795,7 @@ function getRuleset() {
     getBlock()
   );
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -2818,7 +2821,7 @@ function getS() {
 
   pos = tokens[pos].ws_last + 1;
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -2902,7 +2905,7 @@ function getShash() {
 
   const content = [getIdent()];
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -2935,7 +2938,7 @@ function getString() {
 
   pos++;
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -2982,7 +2985,7 @@ function getStylesheet() {
     if (childType === 4) content.push(getDeclDelim());
   }
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -3079,7 +3082,7 @@ function getUnary() {
 
   pos++;
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -3128,7 +3131,7 @@ function getUnicodeRange() {
     else break;
   }
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -3163,7 +3166,7 @@ function getUnit() {
 
   pos++;
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -3217,7 +3220,7 @@ function getUrange() {
   content = joinValues(startPos, tokens[startPos].urangeEnd);
   pos = tokens[startPos].urangeEnd + 1;
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -3291,7 +3294,7 @@ function getUri() {
     l = checkExcluding(uriExcluding, pos);
     rawContent = joinValues(pos, pos + l);
     t = tokens[pos];
-    raw = newNode(NodeType.RawType, rawContent, t.ln, t.col);
+    raw = newNode(NodeType.RawType, rawContent, t.ln, t.col, null, t.sourceFile);
 
     uri.push(raw);
 
@@ -3306,7 +3309,7 @@ function getUri() {
   const end = getLastPosition(uri, line, column, 1);
   pos++;
 
-  return newNode(NodeType.UriType, uri, line, column, end);
+  return newNode(NodeType.UriType, uri, line, column, end, t.sourceFile);
 }
 
 /**
@@ -3371,7 +3374,7 @@ function getValue() {
     else content = content.concat(getSC());
   }
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -3440,7 +3443,7 @@ function getVhash() {
 
   const content = getNmName2();
   const end = getLastPosition(content, line, column + 1);
-  return newNode(type, content, line, column, end);
+  return newNode(type, content, line, column, end, token.sourceFile);
 }
 
 function checkSelectorsGroup(i) {
@@ -3556,7 +3559,7 @@ function getSelector() {
     );
   }
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 function checkCompoundSelector(i) {
@@ -3681,7 +3684,7 @@ function getUniversalSelector() {
 
   pos++;
 
-  return newNode(type, content, line, column, end);
+  return newNode(type, content, line, column, end, token.sourceFile);
 }
 
 function checkTypeSelector(i) {
@@ -3709,7 +3712,7 @@ function getTypeSelector() {
 
   content.push(getIdent());
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 function checkAttributeSelector(i) {
@@ -3796,7 +3799,7 @@ function getAttributeSelector1() {
   pos++;
 
   const end = getLastPosition(content, line, column, 1);
-  return newNode(type, content, line, column, end);
+  return newNode(type, content, line, column, end, token.sourceFile);
 }
 
 /**
@@ -3842,7 +3845,7 @@ function getAttributeSelector2() {
   pos++;
 
   const end = getLastPosition(content, line, column, 1);
-  return newNode(type, content, line, column, end);
+  return newNode(type, content, line, column, end, token.sourceFile);
 }
 
 function checkAttributeName(i) {
@@ -3867,7 +3870,7 @@ function getAttributeName() {
   if (checkNamePrefix(pos)) content.push(getNamePrefix());
   content.push(getIdent());
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 function checkAttributeMatch(i) {
@@ -3909,7 +3912,7 @@ function getAttributeMatch1() {
   const content = tokens[pos].value + tokens[pos + 1].value;
   pos += 2;
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 function checkAttributeMatch2(i) {
@@ -3925,7 +3928,7 @@ function getAttributeMatch2() {
   const content = '=';
 
   pos++;
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 function checkAttributeValue(i) {
@@ -3942,7 +3945,7 @@ function getAttributeValue() {
   if (checkString(pos)) content.push(getString());
   else content.push(getIdent());
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 function checkAttributeFlags(i) {
@@ -3956,7 +3959,7 @@ function getAttributeFlags() {
   const column = token.col;
   const content = [getIdent()];
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 function checkNamePrefix(i) {
@@ -4007,7 +4010,7 @@ function getNamePrefix1() {
 
   content.push(getNamespaceSeparator());
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -4024,7 +4027,7 @@ function getNamePrefix2() {
   const column = token.col;
   const content = [getNamespaceSeparator()];
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -4049,12 +4052,12 @@ function getNamespacePrefix() {
   const content = [];
 
   if (token.type === TokenType.Asterisk) {
-    const asteriskNode = newNode(NodeType.IdentType, '*', line, column);
+    const asteriskNode = newNode(NodeType.IdentType, '*', line, column, null, token.sourceFile);
     content.push(asteriskNode);
     pos++;
   } else if (checkIdent(pos)) content.push(getIdent());
 
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 /**
@@ -4079,7 +4082,7 @@ function getNamespaceSeparator() {
   const content = '|';
 
   pos++;
-  return newNode(type, content, line, column);
+  return newNode(type, content, line, column, null, token.sourceFile);
 }
 
 module.exports = function(_tokens, context) {

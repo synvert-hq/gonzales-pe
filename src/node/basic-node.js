@@ -12,6 +12,7 @@ class Node {
       this.type = options.type;
       this.content = options.content;
       this.syntax = options.syntax;
+      this.sourceFile = options.sourceFile;
 
       if (options.start) this.start = options.start;
       if (options.end) this.end = options.end;
