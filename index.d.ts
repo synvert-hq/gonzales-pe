@@ -2,6 +2,7 @@ export interface Options {
   syntax?: string;
   context?: string;
   tabSize?: number;
+  sourceFile?: string;
 }
 
 export type Node = {
@@ -16,6 +17,7 @@ export type Node = {
   },
   content: Node[] | string,
   syntax: string,
+  sourceFile: string;
   toString(): string,
 }
 
