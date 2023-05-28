@@ -21,6 +21,7 @@ function parser(css, options) {
   var syntax = options && options.syntax || 'css';
   var context = options && options.context || 'stylesheet';
   var tabSize = options && options.tabSize;
+  var sourceFile = options && options.sourceFile;
   if (!isInteger(tabSize) || tabSize < 1) tabSize = 1;
 
   let syntaxParser = syntaxes[syntax];
@@ -34,7 +35,7 @@ function parser(css, options) {
   var mark = syntaxParser.mark;
   var parse = syntaxParser.parse;
 
-  var tokens = getTokens(css, tabSize);
+  var tokens = getTokens(css, tabSize, sourceFile);
   mark(tokens);
 
   var ast;

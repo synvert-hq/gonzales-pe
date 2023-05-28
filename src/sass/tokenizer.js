@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function(css, tabSize) {
+module.exports = function(css, tabSize, sourceFile) {
   var TokenType = require('../token-types');
 
   let tokens = [];
@@ -63,7 +63,8 @@ module.exports = function(css, tabSize) {
       ln: ln,
       col: column,
       type: type,
-      value: value
+      value: value,
+      sourceFile: sourceFile
     });
   }
 
