@@ -16,6 +16,19 @@ class Node {
 
       if (options.start) this.start = options.start;
       if (options.end) this.end = options.end;
+
+      if (Array.isArray(this.content)) {
+        const definedProperties = [];
+        this.content.forEach(child => {
+          if (!definedProperties.includes(child.type)) {
+            definedProperties.push(child.type);
+            Object.defineProperty(this, child.type, {
+              value: child,
+              writeable: false
+            });
+          }
+        });
+      }
     }
 
     /**
